@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Job Matches</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.4em;
+            font-weight: 600;
+        }
+        .header-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        .user-info {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .user-info h2 {
+            margin: 0 0 15px;
+            color: #2196f3;
+            font-size: 1.5em;
+        }
+        .skills-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .skills-section h3 {
+            margin: 0 0 20px;
+            color: #2196f3;
+            font-size: 1.3em;
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .skill {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .skills-filter-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .skills-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #skill-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .filter-btn {
+            padding: 12px 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        .filter-btn:hover {
+            background: #bbdefb;
+            transform: translateY(-2px);
+        }
+        .filter-btn i {
+            font-size: 16px;
+        }
+        #selected-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .skill-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .remove-skill {
+            cursor: pointer;
+            color: #f44336;
+        }
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .jobs-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+        .jobs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        .job-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .job-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .job-title {
+            font-size: 1.4em;
+            margin: 0 0 10px;
+            color: #2196f3;
+            font-weight: 600;
+        }
+        .job-company {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            font-size: 0.95em;
+            color: #666;
+        }
+        .job-meta i {
+            margin-right: 8px;
+            color: #2196f3;
+        }
+        .job-description {
+            margin: 20px 0;
+            color: #555;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        .job-skills {
+            margin: 25px 0 20px;
+        }
+        .job-skills h4 {
+            margin: 0 0 15px;
+            font-size: 1em;
+            color: #666;
+            font-weight: 500;
+        }
+        .apply-btn {
+            display: inline-block;
+            background: #2196f3;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+        }
+        .apply-btn:hover {
+            background: #1976d2;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        .matched {
+            border-left: 5px solid #4caf50;
+        }
+        .matched .job-title {
+            color: #2e7d32;
+        }
+        .match-percentage {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .no-jobs {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            grid-column: 1 / -1;
+        }
+        .no-jobs h3 {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 30px;
+            color: #2196f3;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            color: #1976d2;
+            transform: translateX(-5px);
+        }
+        .back-btn i {
+            margin-right: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.4s;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close:hover {
+            color: #333;
+        }
+        #application-status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .status-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .load-more-btn {
+            width: 100%;
+            padding: 15px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 6px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            font-weight: 500;
+            grid-column: 1 / -1;
+        }
+        .load-more-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .filter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .filter-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+        }
+        .filter-options {
+            margin: 25px 0;
+        }
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        .filter-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #555;
+        }
+        .filter-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        #salary-range {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-top: 5px;
+        }
+        /* Skill highlighting styles */
+        .matched-skill {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        .missing-skill {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .missing-skills-summary {
+            color: #d32f2f;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .perfect-match {
+            color: #2e7d32;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Your Personalized Job Matches</h1>
+            <div class="header-subtitle">Tailored to your skills and experience</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="user-info">
+            <h2>Welcome, <span id="display-username">Candidate</span>!</h2>
+            <p><strong>Email:</strong> <span id="display-email">No email provided</span></p>
+            <p><strong>Phone:</strong> <span id="display-phone">No phone provided</span></p>
+        </div>
+        
+        <div class="skills-section">
+            <h3>Your Skills Profile</h3>
+            <div class="skills-list" id="skills-container">
+                <!-- Skills from resume will appear here -->
+            </div>
+        </div>
+        
+        <div class="skills-filter-section">
+            <h3>Refine Your Job Matches</h3>
+            <div class="skills-input-container">
+                <input type="text" id="skill-input" placeholder="Type a skill to add (e.g., 'React', 'Python')">
+                <button id="add-skill-btn" class="filter-btn">
+                    <i class="fas fa-plus"></i> Add Skill
+                </button>
+            </div>
+            <div id="selected-skills">
+                <!-- Manually added skills will appear here -->
+            </div>
+            <div class="filter-actions">
+                <button id="refresh-jobs" class="filter-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh Matches
+                </button>
+                <button id="more-jobs" class="filter-btn">
+                    <i class="fas fa-ellipsis-h"></i> Show More Jobs
+                </button>
+                <button id="filter-jobs" class="filter-btn">
+                    <i class="fas fa-filter"></i> Filter Jobs
+                </button>
+            </div>
+        </div>
+        
+        <div class="jobs-header">
+            <h2>Recommended Positions</h2>
+        </div>
+        
+        <div class="jobs-container" id="jobs-container">
+            <!-- Job cards will be dynamically inserted here -->
+        </div>
+        
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Application Form</a>
+    </div>
+
+    <!-- Application Confirmation Modal -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Your Application</h2>
+            <p>You are applying for: <strong id="modal-job-title"></strong></p>
+            <p>Company: <strong id="modal-job-company"></strong></p>
+            <div id="application-status"></div>
+            <button id="confirm-apply" class="apply-btn">
+                <i class="fas fa-paper-plane"></i> Submit Application
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="filter-modal" style="display: none;">
+        <div class="filter-modal-content">
+            <h3>Filter Jobs</h3>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <h4>Job Type</h4>
+                    <label><input type="checkbox" class="job-type" value="Full-time" checked> Full-time</label>
+                    <label><input type="checkbox" class="job-type" value="Part-time" checked> Part-time</label>
+                    <label><input type="checkbox" class="job-type" value="Contract" checked> Contract</label>
+                    <label><input type="checkbox" class="job-type" value="Remote" checked> Remote</label>
+                </div>
+                <div class="filter-group">
+                    <h4>Salary Range</h4>
+                    <select id="salary-range">
+                        <option value="all">All Ranges</option>
+                        <option value="5">₹5L+ per annum</option>
+                        <option value="10">₹10L+ per annum</option>
+                        <option value="15">₹15L+ per annum</option>
+                        <option value="20">₹20L+ per annum</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <h4>Experience Level</h4>
+                    <label><input type="checkbox" class="experience-level" value="Entry" checked> Entry Level</label>
+                    <label><input type="checkbox" class="experience-level" value="Mid" checked> Mid Level</label>
+                    <label><input type="checkbox" class="experience-level" value="Senior" checked> Senior Level</label>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button id="apply-filter" class="filter-btn" style="background: #4caf50; color: white;">
+                    <i class="fas fa-check"></i> Apply Filters
+                </button>
+                <button id="cancel-filter" class="filter-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+    
+    <script>
+        // Initialize EmailJS with your User ID
+        emailjs.init('zxGlpUF_bCdyvrAUp');
+        
+        // Current application data
+        let currentApplication = {
+            jobId: null,
+            username: '',
+            email: '',
+            phone: '',
+            skills: []
+        };
+
+        // Job display management
+        let allJobs = [...jobList];
+        let displayedJobs = 6;
+        let userSelectedSkills = [];
+
+        // DOM elements
+        const modal = document.getElementById("applicationModal");
+        const span = document.getElementsByClassName("close")[0];
+        const confirmBtn = document.getElementById("confirm-apply");
+        const jobTitleEl = document.getElementById("modal-job-title");
+        const jobCompanyEl = document.getElementById("modal-job-company");
+        const statusEl = document.getElementById("application-status");
+        const filterModal = document.getElementById("filterModal");
+
+        // Calculate match percentage
+        function calculateMatchPercentage(jobSkills, userSkills) {
+            if (!userSkills || userSkills.length === 0) return 0;
+            
+            const userSkillsLower = userSkills.map(skill => skill.toLowerCase());
+            const matchedSkills = jobSkills.filter(jobSkill => 
+                userSkillsLower.includes(jobSkill.toLowerCase())
+            );
+            
+            return Math.round((matchedSkills.length / jobSkills.length) * 100);
+        }
+
+        // On page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data from localStorage
+            currentApplication = {
+                username: localStorage.getItem('username') || 'Candidate',
+                email: localStorage.getItem('email') || 'No email provided',
+                phone: localStorage.getItem('phone') || 'No phone provided',
+                skills: JSON.parse(localStorage.getItem('skills')) || []
+            };
+
+            // Display user info
+            document.getElementById('display-username').textContent = currentApplication.username;
+            document.getElementById('display-email').textContent = currentApplication.email;
+            document.getElementById('display-phone').textContent = currentApplication.phone;
+
+            // Display skills from resume
+            const skillsContainer = document.getElementById('skills-container');
+            skillsContainer.innerHTML = '';
+            
+            if (currentApplication.skills.length > 0) {
+                currentApplication.skills.forEach(skill => {
+                    const skillElement = document.createElement('span');
+                    skillElement.className = 'skill';
+                    skillElement.textContent = skill;
+                    skillsContainer.appendChild(skillElement);
+                });
+            } else {
+                skillsContainer.innerHTML = '<span class="skill">No skills detected in resume</span>';
+            }
+
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initial job display
+            displayJobs();
+        });
+
+        function setupEventListeners() {
+            // Skill management
+            document.getElementById('add-skill-btn').addEventListener('click', addSkill);
+            document.getElementById('skill-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addSkill();
+            });
+            
+            // Job actions
+            document.getElementById('refresh-jobs').addEventListener('click', refreshJobs);
+            document.getElementById('more-jobs').addEventListener('click', showMoreJobs);
+            document.getElementById('filter-jobs').addEventListener('click', function() {
+                filterModal.style.display = 'flex';
+            });
+            
+            // Modal handlers
+            span.onclick = () => modal.style.display = "none";
+            window.onclick = (event) => {
+                if (event.target == modal) modal.style.display = "none";
+                if (event.target == filterModal) filterModal.style.display = "none";
+            };
+            confirmBtn.onclick = sendApplication;
+            
+            // Filter modal buttons
+            document.getElementById('apply-filter').addEventListener('click', applyFilters);
+            document.getElementById('cancel-filter').addEventListener('click', function() {
+                filterModal.style.display = 'none';
+            });
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skill-input');
+            const skill = input.value.trim();
+            
+            if (skill && !userSelectedSkills.includes(skill) && !currentApplication.skills.includes(skill)) {
+                userSelectedSkills.push(skill);
+                renderSelectedSkills();
+                input.value = '';
+            }
+        }
+
+        function removeSkill(skill) {
+            userSelectedSkills = userSelectedSkills.filter(s => s !== skill);
+            renderSelectedSkills();
+        }
+
+        function renderSelectedSkills() {
+            const container = document.getElementById('selected-skills');
+            container.innerHTML = '';
+            
+            userSelectedSkills.forEach(skill => {
+                const tag = document.createElement('span');
+                tag.className = 'skill-tag';
+                tag.innerHTML = `
+                    ${skill}
+                    <span class="remove-skill" data-skill="${skill}">
+                        <i class="fas fa-times"></i>
+                    </span>
+                `;
+                container.appendChild(tag);
+            });
+            
+            document.querySelectorAll('.remove-skill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    removeSkill(this.getAttribute('data-skill'));
+                });
+            });
+        }
+
+        function refreshJobs() {
+            const allSkills = [...currentApplication.skills, ...userSelectedSkills];
+            currentApplication.skills = [...new Set(allSkills)];
+            
+            localStorage.setItem('skills', JSON.stringify(currentApplication.skills));
+            
+            displayedJobs = 6;
+            displayJobs();
+            
+            const statusEl = document.createElement('div');
+            statusEl.className = 'status-success';
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Job matches refreshed with your updated skills';
+            document.querySelector('.skills-filter-section').appendChild(statusEl);
+            
+            setTimeout(() => {
+                statusEl.remove();
+            }, 3000);
+        }
+
+        function showMoreJobs() {
+            displayedJobs += 6;
+            displayJobs();
+        }
+
+        function applyFilters() {
+            const selectedTypes = [];
+            document.querySelectorAll('.job-type:checked').forEach(checkbox => {
+                selectedTypes.push(checkbox.value);
+            });
+            
+            const selectedExperiences = [];
+            document.querySelectorAll('.experience-level:checked').forEach(checkbox => {
+                selectedExperiences.push(checkbox.value);
+            });
+            
+            const salaryRange = document.getElementById('salary-range').value;
+            
+            allJobs = jobList.filter(job => {
+                if (!selectedTypes.some(type => job.type.includes(type))) return false;
+                if (!selectedExperiences.includes(job.experience)) return false;
+                
+                if (salaryRange !== 'all') {
+                    const minSalary = parseInt(salaryRange) * 100000;
+                    const jobSalary = parseInt(job.salary.replace(/\D/g, ''));
+                    if (jobSalary < minSalary) return false;
+                }
+                
+                return true;
+            });
+            
+            displayedJobs = 6;
+            filterModal.style.display = 'none';
+            displayJobs();
+        }
+
+        function displayJobs() {
+            const jobsContainer = document.getElementById('jobs-container');
+            jobsContainer.innerHTML = '';
+    
+            // Calculate match percentage for all jobs and sort by percentage (highest first)
+            const jobsWithMatches = allJobs.map(job => {
+                const matchPercentage = calculateMatchPercentage(job.skills, currentApplication.skills);
+                const missingSkills = job.skills.filter(skill => 
+                    !currentApplication.skills.some(
+                        userSkill => userSkill.toLowerCase() === skill.toLowerCase()
+                    )
+                );
+                return { 
+                    ...job, 
+                    matchPercentage,
+                    missingSkills
+                };
+            }).sort((a, b) => b.matchPercentage - a.matchPercentage);
+    
+            // Get jobs to display (limited by displayedJobs)
+            const jobsToShow = jobsWithMatches.slice(0, displayedJobs);
+            
+            if (jobsToShow.length === 0) {
+                jobsContainer.innerHTML = `
+                    <div class="no-jobs">
+                        <h3>No jobs match your current filters</h3>
+                        <p>Try adjusting your filters or skills</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            jobsToShow.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = `job-card ${job.matchPercentage > 50 ? 'matched' : ''}`;
+                
+                jobCard.innerHTML = `
+                    ${job.matchPercentage > 0 ? `
+                        <div class="match-percentage">${job.matchPercentage}% Match</div>
+                    ` : ''}
+                    <h3 class="job-title">${job.title}</h3>
+                    <div class="job-company">${job.company}</div>
+                    
+                    <div class="job-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+                        <span><i class="fas fa-clock"></i> ${job.type}</span>
+                        <span><i class="fas fa-money-bill-wave"></i> ${job.salary}</span>
+                    </div>
+                    
+                    <div class="job-description">${job.description}</div>
+                    
+                    <div class="job-skills">
+                        <h4>Required Skills:</h4>
+                        <div class="skills-list">
+                            ${job.skills.map(skill => {
+                                const isMatched = currentApplication.skills.some(
+                                    userSkill => userSkill.toLowerCase() === skill.toLowerCase()
+                                );
+                                return `<span class="skill ${isMatched ? 'matched-skill' : 'missing-skill'}">${skill}</span>`;
+                            }).join('')}
+                        </div>
+                        ${job.missingSkills.length > 0 ? `
+                            <p class="missing-skills-summary">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <strong>Missing Skills:</strong> ${job.missingSkills.join(', ')}
+                            </p>
+                        ` : `
+                            <p class="perfect-match">
+                                <i class="fas fa-check-circle"></i> All skills matched!
+                            </p>
+                        `}
+                    </div>
+                    
+                    <button class="apply-btn" data-job-id="${job.id}">
+                        <i class="fas fa-paper-plane"></i> Apply Now
+                    </button>
+                `;
+                
+                jobCard.querySelector('.apply-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentApplication.jobId = job.id;
+                    jobTitleEl.textContent = job.title;
+                    jobCompanyEl.textContent = job.company;
+                    statusEl.innerHTML = '';
+                    modal.style.display = "block";
+                });
+                
+                jobsContainer.appendChild(jobCard);
+            });
+            
+            if (allJobs.length > displayedJobs) {
+                const loadMoreBtn = document.createElement('button');
+                loadMoreBtn.className = 'load-more-btn';
+                loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More Jobs';
+                loadMoreBtn.addEventListener('click', showMoreJobs);
+                jobsContainer.appendChild(loadMoreBtn);
+            }
+        }
+
+        async function sendApplication() {
+            const job = jobList.find(j => j.id === currentApplication.jobId);
+            if (!job) return;
+            
+            statusEl.innerHTML = '<p><i class="fas fa-spinner fa-spin"></i> Sending application...</p>';
+            
+            try {
+                // 1. Get resume data
+                const resumeDataURL = localStorage.getItem('resumeData');
+                if (!resumeDataURL) throw new Error('Resume not found in storage');
+                
+                const resumeFileName = localStorage.getItem('resumeFileName') || 'resume.pdf';
+                const resumeTextContent = localStorage.getItem('resumeText') || 'Resume text not available';
+
+                // 2. Convert DataURL to File
+                const response = await fetch(resumeDataURL);
+                const blob = await response.blob();
+                const file = new File([blob], resumeFileName, { 
+                    type: blob.type,
+                    lastModified: new Date().getTime()
+                });
+
+                // 3. Calculate missing skills
+                const missingSkills = job.skills.filter(skill => 
+                    !currentApplication.skills.some(
+                        userSkill => userSkill.toLowerCase() === skill.toLowerCase()
+                    )
+                );
+
+                // 4. Prepare email data
+                const templateParams = {
+                    to_email: 'mjayarmn158@gmail.com',
+                    applicant_name: currentApplication.username,
+                    applicant_email: currentApplication.email,
+                    applicant_phone: currentApplication.phone,
+                    job_title: job.title,
+                    job_company: job.company,
+                    job_location: job.location,
+                    job_type: job.type,
+                    job_salary: job.salary,
+                    applicant_skills: currentApplication.skills.join(', ') || 'No skills detected',
+                    missing_skills: missingSkills.join(', ') || 'No missing skills - perfect match!',
+                    match_percentage: calculateMatchPercentage(job.skills, currentApplication.skills),
+                    application_date: new Date().toLocaleDateString('en-US', {
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }),
+                    resume_file: file,
+                    resume_file_name: resumeFileName,
+                    resume_file_size: `${Math.round(blob.size / 1024)} KB`,
+                    resume_text_content: resumeTextContent.substring(0, 1000) // First 1000 chars
+                };
+
+                // 5. Send email
+                await emailjs.send('service_v8810qp', 'template_5dwkkf8', templateParams);
+                
+                statusEl.innerHTML = `
+                    <div class="status-success">
+                        <i class="fas fa-check-circle"></i> Application sent successfully!
+                    </div>
+                    <p>A confirmation has been sent to ${currentApplication.email}</p>
+                `;
+                
+                setTimeout(() => {
+                    modal.style.display = "none";
+                }, 3000);
+            } catch (error) {
+                console.error('Application error:', error);
+                statusEl.innerHTML = `
+                    <div class="status-error">
+                        <i class="fas fa-exclamation-circle"></i> ${error.message || 'Failed to send application'}
+                    </div>
+                    <p>Please try again or contact support</p>
+                `;
+            }
+        }
+
+        // Comprehensive job data (50+ sample jobs)
+        const jobList = [
+            {
+                id: 1,
+                title: "Senior Frontend Engineer (React)",
+                company: "TechVision Inc.",
+                location: "Bangalore (Remote Available)",
+                type: "Full-time",
+                salary: "₹12,00,000 - ₹18,00,000/yr",
+                skills: ["JavaScript", "React", "Redux", "TypeScript", "HTML5", "CSS3", "REST APIs"],
+                description: "Lead the development of our next-generation web applications using cutting-edge React technologies. Mentor junior developers and collaborate with UX designers to create exceptional user experiences.",
+                experience: "Senior"
+            },
+            {
+                id: 2,
+                title: "Backend Developer - Node.js",
+                company: "DataSystems Ltd.",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["Node.js", "Express", "MongoDB", "PostgreSQL", "AWS", "Docker"],
+                description: "Build scalable backend services for our enterprise SaaS platform. Optimize database queries and implement robust APIs that serve millions of requests daily.",
+                experience: "Mid"
+            },
+            {
+                id: 3,
+                title: "Full Stack Developer (MERN)",
+                company: "WebSolutions Co.",
+                location: "Chennai",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["JavaScript", "React", "Node.js", "Express", "MongoDB", "GraphQL"],
+                description: "Work on end-to-end development of our customer-facing web applications. Participate in all phases of development from concept to deployment.",
+                experience: "Mid"
+            },
+            {
+                id: 4,
+                title: "Python Developer (Django)",
+                company: "AI Innovations",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["Python", "Django", "Flask", "SQL", "REST API", "AWS"],
+                description: "Develop and maintain our core web applications using Python and Django. Implement new features and optimize existing codebase for performance.",
+                experience: "Mid"
+            },
+            {
+                id: 5,
+                title: "DevOps Engineer",
+                company: "CloudTech Solutions",
+                location: "Remote",
+                type: "Full-time",
+                salary: "₹11,00,000 - ₹16,00,000/yr",
+                skills: ["Docker", "Kubernetes", "AWS", "CI/CD", "Terraform", "Linux"],
+                description: "Design and maintain our cloud infrastructure. Implement CI/CD pipelines and automate deployment processes across multiple environments.",
+                experience: "Senior"
+            },
+            {
+                id: 6,
+                title: "UI/UX Designer",
+                company: "Creative Designs",
+                location: "Mumbai",
+                type: "Part-time",
+                salary: "₹25,000 - ₹45,000/month",
+                skills: ["Figma", "Adobe XD", "UI/UX", "HTML", "CSS", "Prototyping"],
+                description: "Create beautiful and intuitive user interfaces for our digital products. Collaborate with developers to implement designs with pixel-perfect accuracy.",
+                experience: "Entry"
+            },
+            {
+                id: 7,
+                title: "Mobile Developer (React Native)",
+                company: "AppWorks",
+                location: "Remote",
+                type: "Contract",
+                salary: "₹6,00,000 - ₹9,00,000/yr",
+                skills: ["React Native", "JavaScript", "Redux", "Firebase", "iOS", "Android"],
+                description: "Develop cross-platform mobile applications using React Native. Work closely with product team to deliver high-quality user experiences.",
+                experience: "Mid"
+            },
+            {
+                id: 8,
+                title: "Junior Frontend Developer",
+                company: "Digital Solutions",
+                location: "Delhi",
+                type: "Full-time",
+                salary: "₹4,00,000 - ₹6,00,000/yr",
+                skills: ["HTML", "CSS", "JavaScript", "Bootstrap", "jQuery"],
+                description: "Entry-level position for recent graduates. Learn modern frontend development while contributing to real projects under mentor guidance.",
+                experience: "Entry"
+            },
+            {
+                id: 9,
+                title: "Senior Data Scientist",
+                company: "Analytics Pro",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹18,00,000 - ₹25,00,000/yr",
+                skills: ["Python", "Machine Learning", "TensorFlow", "SQL", "Data Analysis"],
+                description: "Lead our data science initiatives and develop advanced machine learning models. Work with large datasets to extract business insights.",
+                experience: "Senior"
+            },
+            {
+                id: 10,
+                title: "Technical Writer",
+                company: "DevDocs",
+                location: "Remote",
+                type: "Part-time",
+                salary: "₹30,000 - ₹50,000/month",
+                skills: ["Technical Writing", "Documentation", "Markdown", "Git", "API Documentation"],
+                description: "Create clear and comprehensive technical documentation for our developer products. Work closely with engineering teams to understand complex technical concepts.",
+                experience: "Mid"
+            },
+            {
+                id: 11,
+                title: "Cloud Architect",
+                company: "SkyNet Technologies",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹20,00,000 - ₹30,00,000/yr",
+                skills: ["AWS", "Azure", "Google Cloud", "Terraform", "Kubernetes", "CI/CD"],
+                description: "Design and implement cloud solutions for enterprise clients. Establish best practices for cloud adoption and migration strategies.",
+                experience: "Senior"
+            },
+            {
+                id: 12,
+                title: "Angular Developer",
+                company: "WebCraft Studios",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["Angular", "TypeScript", "RxJS", "HTML5", "CSS3", "REST APIs"],
+                description: "Develop complex single-page applications using Angular framework. Collaborate with backend teams to integrate with APIs and services.",
+                experience: "Mid"
+            },
+            {
+                id: 13,
+                title: "QA Automation Engineer",
+                company: "TestRight Solutions",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹7,00,000 - ₹10,00,000/yr",
+                skills: ["Selenium", "Java", "TestNG", "JUnit", "API Testing", "Jenkins"],
+                description: "Design and implement automated test frameworks for web and mobile applications. Establish CI/CD pipelines for automated testing.",
+                experience: "Mid"
+            },
+            {
+                id: 14,
+                title: "Blockchain Developer",
+                company: "ChainTech",
+                location: "Remote",
+                type: "Full-time",
+                salary: "₹15,00,000 - ₹22,00,000/yr",
+                skills: ["Solidity", "Ethereum", "Smart Contracts", "Blockchain", "Node.js", "Web3"],
+                description: "Develop decentralized applications and smart contracts on blockchain platforms. Research and implement blockchain solutions for various use cases.",
+                experience: "Senior"
+            },
+            {
+                id: 15,
+                title: "Java Spring Boot Developer",
+                company: "Enterprise Solutions",
+                location: "Chennai",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["Java", "Spring Boot", "Hibernate", "Microservices", "REST API", "SQL"],
+                description: "Develop and maintain enterprise applications using Java and Spring framework. Implement microservices architecture and RESTful APIs.",
+                experience: "Mid"
+            },
+            {
+                id: 16,
+                title: "Data Engineer",
+                company: "BigData Corp",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹12,00,000 - ₹18,00,000/yr",
+                skills: ["Python", "SQL", "Spark", "Hadoop", "AWS", "ETL"],
+                description: "Design and build data pipelines for processing large datasets. Optimize data storage and retrieval for analytics applications.",
+                experience: "Mid"
+            },
+            {
+                id: 17,
+                title: "Cybersecurity Analyst",
+                company: "SecureNet",
+                location: "Delhi",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["Cybersecurity", "Network Security", "Penetration Testing", "SIEM", "Firewalls", "Linux"],
+                description: "Monitor and protect our network infrastructure from security threats. Conduct vulnerability assessments and implement security measures.",
+                experience: "Mid"
+            },
+            {
+                id: 18,
+                title: "Flutter Developer",
+                company: "MobileFirst",
+                location: "Remote",
+                type: "Contract",
+                salary: "₹7,00,000 - ₹10,00,000/yr",
+                skills: ["Flutter", "Dart", "Firebase", "REST API", "iOS", "Android"],
+                description: "Build cross-platform mobile applications using Flutter framework. Collaborate with designers to implement beautiful UIs.",
+                experience: "Mid"
+            },
+            {
+                id: 19,
+                title: "ERP Consultant",
+                company: "BusinessSoft",
+                location: "Mumbai",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["SAP", "Oracle", "ERP", "Business Process", "SQL", "Analytics"],
+                description: "Implement and customize ERP solutions for enterprise clients. Analyze business processes and recommend system improvements.",
+                experience: "Mid"
+            },
+            {
+                id: 20,
+                title: "Game Developer (Unity)",
+                company: "PlayStudio",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["Unity", "C#", "3D Modeling", "Game Physics", "AR/VR", "Mobile Development"],
+                description: "Develop engaging games for mobile and desktop platforms using Unity engine. Implement game mechanics and optimize performance.",
+                experience: "Mid"
+            },
+            {
+                id: 21,
+                title: "AI Research Scientist",
+                company: "DeepMind Labs",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹25,00,000 - ₹35,00,000/yr",
+                skills: ["Python", "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "Research"],
+                description: "Conduct cutting-edge research in artificial intelligence. Develop novel algorithms and publish research papers.",
+                experience: "Senior"
+            },
+            {
+                id: 22,
+                title: "Technical Support Engineer",
+                company: "TechSupport Inc.",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹5,00,000 - ₹7,00,000/yr",
+                skills: ["Troubleshooting", "Linux", "Networking", "Customer Support", "Scripting", "Databases"],
+                description: "Provide technical support for our enterprise software products. Diagnose and resolve customer issues efficiently.",
+                experience: "Entry"
+            },
+            {
+                id: 23,
+                title: "Product Manager",
+                company: "InnovateTech",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹18,00,000 - ₹25,00,000/yr",
+                skills: ["Product Management", "Agile", "Scrum", "Market Research", "Roadmapping", "UX"],
+                description: "Lead product development from conception to launch. Work with cross-functional teams to deliver exceptional products.",
+                experience: "Senior"
+            },
+            {
+                id: 24,
+                title: "iOS Developer (Swift)",
+                company: "AppleDev Solutions",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["Swift", "iOS", "Xcode", "UIKit", "Core Data", "REST API"],
+                description: "Develop native iOS applications for our consumer products. Implement clean architecture and maintain high code quality.",
+                experience: "Mid"
+            },
+            {
+                id: 25,
+                title: "Android Developer (Kotlin)",
+                company: "DroidWorks",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["Kotlin", "Android", "Jetpack", "MVVM", "REST API", "Firebase"],
+                description: "Build high-quality Android applications using modern Kotlin practices. Collaborate with designers to implement pixel-perfect UIs.",
+                experience: "Mid"
+            },
+            {
+                id: 26,
+                title: "Salesforce Developer",
+                company: "CloudForce",
+                location: "Mumbai",
+                type: "Full-time",
+                salary: "₹12,00,000 - ₹18,00,000/yr",
+                skills: ["Salesforce", "Apex", "Lightning", "SOQL", "JavaScript", "Integration"],
+                description: "Customize and develop Salesforce solutions for enterprise clients. Implement business logic using Apex and Lightning components.",
+                experience: "Senior"
+            },
+            {
+                id: 27,
+                title: "Big Data Architect",
+                company: "DataMasters",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹22,00,000 - ₹30,00,000/yr",
+                skills: ["Hadoop", "Spark", "Kafka", "NoSQL", "Data Warehousing", "AWS"],
+                description: "Design and implement big data solutions for processing petabytes of data. Establish data governance and architecture standards.",
+                experience: "Senior"
+            },
+            {
+                id: 28,
+                title: "WordPress Developer",
+                company: "WebPress Solutions",
+                location: "Remote",
+                type: "Contract",
+                salary: "₹5,00,000 - ₹8,00,000/yr",
+                skills: ["WordPress", "PHP", "JavaScript", "CSS", "HTML", "SEO"],
+                description: "Develop custom WordPress themes and plugins. Optimize websites for performance and search engine visibility.",
+                experience: "Mid"
+            },
+            {
+                id: 29,
+                title: "Network Engineer",
+                company: "NetConnect",
+                location: "Delhi",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["Networking", "Cisco", "Firewalls", "VPN", "TCP/IP", "Linux"],
+                description: "Design and maintain our corporate network infrastructure. Troubleshoot network issues and ensure high availability.",
+                experience: "Mid"
+            },
+            {
+                id: 30,
+                title: "Embedded Systems Engineer",
+                company: "IoT Solutions",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["C", "C++", "Embedded Systems", "RTOS", "Microcontrollers", "IoT"],
+                description: "Develop firmware for embedded devices and IoT products. Optimize code for performance and memory constraints.",
+                experience: "Mid"
+            },
+            {
+                id: 31,
+                title: "Ruby on Rails Developer",
+                company: "RubyTech",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["Ruby", "Ruby on Rails", "PostgreSQL", "REST API", "JavaScript", "AWS"],
+                description: "Build and maintain web applications using Ruby on Rails framework. Implement clean architecture and best practices.",
+                experience: "Mid"
+            },
+            {
+                id: 32,
+                title: "Business Analyst",
+                company: "Analytics Pro",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["SQL", "Excel", "Power BI", "Requirements Gathering", "Documentation", "UML"],
+                description: "Analyze business requirements and translate them into technical specifications. Work with stakeholders to define project scope.",
+                experience: "Mid"
+            },
+            {
+                id: 33,
+                title: "SEO Specialist",
+                company: "Digital Marketing Pro",
+                location: "Remote",
+                type: "Part-time",
+                salary: "₹30,000 - ₹50,000/month",
+                skills: ["SEO", "Google Analytics", "Keyword Research", "Content Strategy", "On-page SEO", "Technical SEO"],
+                description: "Optimize websites for search engines and improve organic rankings. Conduct keyword research and implement SEO best practices.",
+                experience: "Mid"
+            },
+            {
+                id: 34,
+                title: "System Administrator",
+                company: "IT Solutions",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹7,00,000 - ₹10,00,000/yr",
+                skills: ["Linux", "Windows Server", "Bash", "Virtualization", "Networking", "Troubleshooting"],
+                description: "Maintain and administer our server infrastructure. Ensure system availability and performance for all services.",
+                experience: "Mid"
+            },
+            {
+                id: 35,
+                title: "Content Writer (Technical)",
+                company: "TechContent",
+                location: "Remote",
+                type: "Part-time",
+                salary: "₹25,000 - ₹40,000/month",
+                skills: ["Technical Writing", "Content Creation", "Markdown", "Git", "Documentation", "Blogging"],
+                description: "Create technical documentation, tutorials, and blog posts for developer audience. Work with subject matter experts to produce accurate content.",
+                experience: "Entry"
+            },
+            {
+                id: 36,
+                title: "Vue.js Developer",
+                company: "ModernWeb",
+                location: "Chennai",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["Vue.js", "JavaScript", "HTML5", "CSS3", "REST API", "State Management"],
+                description: "Develop modern web applications using Vue.js framework. Implement responsive designs and optimize for performance.",
+                experience: "Mid"
+            },
+            {
+                id: 36,
+                title: "Vue.js Developer",
+                company: "ModernWeb",
+                location: "Chennai",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["Vue.js", "JavaScript", "HTML5", "CSS3", "REST API", "State Management"],
+                description: "Develop modern web applications using Vue.js framework. Implement responsive designs and optimize for performance.",
+                experience: "Mid"
+            },
+            {
+                id: 37,
+                title: "Data Visualization Specialist",
+                company: "Visual Insights",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹10,00,000 - ₹15,00,000/yr",
+                skills: ["Tableau", "Power BI", "D3.js", "Python", "Data Analysis", "Dashboarding"],
+                description: "Create interactive dashboards and data visualizations to communicate insights. Work with data teams to present complex information clearly.",
+                experience: "Mid"
+            },
+            {
+                id: 38,
+                title: "Go Developer",
+                company: "CloudNative",
+                location: "Remote",
+                type: "Full-time",
+                salary: "₹12,00,000 - ₹18,00,000/yr",
+                skills: ["Go", "Microservices", "Docker", "Kubernetes", "REST API", "gRPC"],
+                description: "Build high-performance backend services using Go language. Implement scalable microservices architecture for cloud-native applications.",
+                experience: "Senior"
+            },
+            {
+                id: 39,
+                title: "QA Manual Tester",
+                company: "Quality Assurance Inc.",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹4,00,000 - ₹6,00,000/yr",
+                skills: ["Manual Testing", "Test Cases", "Bug Tracking", "JIRA", "Regression Testing", "Mobile Testing"],
+                description: "Perform manual testing of web and mobile applications. Document test cases and report bugs with detailed reproduction steps.",
+                experience: "Entry"
+            },
+            {
+                id: 40,
+                title: "Rust Developer",
+                company: "SafeCode",
+                location: "Remote",
+                type: "Full-time",
+                salary: "₹15,00,000 - ₹22,00,000/yr",
+                skills: ["Rust", "Systems Programming", "Performance Optimization", "Concurrency", "Blockchain", "Networking"],
+                description: "Develop high-performance systems software using Rust language. Work on security-critical applications requiring memory safety.",
+                experience: "Senior"
+            },
+            {
+                id: 41,
+                title: "IT Project Manager",
+                company: "TechSolutions",
+                location: "Delhi",
+                type: "Full-time",
+                salary: "₹15,00,000 - ₹20,00,000/yr",
+                skills: ["Project Management", "Agile", "Scrum", "JIRA", "Risk Management", "Stakeholder Management"],
+                description: "Lead IT projects from initiation to completion. Manage timelines, budgets, and resources to deliver successful outcomes.",
+                experience: "Senior"
+            },
+            {
+                id: 42,
+                title: "Laravel Developer",
+                company: "PHP Masters",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹8,00,000 - ₹12,00,000/yr",
+                skills: ["Laravel", "PHP", "MySQL", "REST API", "JavaScript", "Vue.js"],
+                description: "Develop and maintain web applications using Laravel framework. Implement clean architecture and follow best practices.",
+                experience: "Mid"
+            },
+            {
+                id: 43,
+                title: "Site Reliability Engineer",
+                company: "CloudScale",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹14,00,000 - ₹20,00,000/yr",
+                skills: ["Linux", "Docker", "Kubernetes", "AWS", "Monitoring", "Automation"],
+                description: "Ensure reliability and performance of our production systems. Implement monitoring and automation to improve system stability.",
+                experience: "Senior"
+            },
+            {
+                id: 44,
+                title: "Technical Trainer",
+                company: "CodeAcademy",
+                location: "Remote",
+                type: "Part-time",
+                salary: "₹35,000 - ₹60,000/month",
+                skills: ["Teaching", "Programming", "Curriculum Development", "Public Speaking", "Mentoring", "Technical Documentation"],
+                description: "Deliver technical training sessions on various programming topics. Develop course materials and mentor students in their learning journey.",
+                experience: "Mid"
+            },
+            {
+                id: 45,
+                title: "BI Developer",
+                company: "DataInsights",
+                location: "Mumbai",
+                type: "Full-time",
+                salary: "₹9,00,000 - ₹14,00,000/yr",
+                skills: ["SQL", "Power BI", "ETL", "Data Warehousing", "DAX", "SSIS"],
+                description: "Develop business intelligence solutions and reports. Design and implement data pipelines for analytics and reporting.",
+                experience: "Mid"
+            },
+            {
+                id: 46,
+                title: "Computer Vision Engineer",
+                company: "VisionTech",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹16,00,000 - ₹24,00,000/yr",
+                skills: ["Python", "OpenCV", "TensorFlow", "Deep Learning", "Image Processing", "Neural Networks"],
+                description: "Develop computer vision algorithms and applications. Work on image recognition, object detection, and video analysis solutions.",
+                experience: "Senior"
+            },
+            {
+                id: 47,
+                title: "Elixir Developer",
+                company: "FunctionalPro",
+                location: "Remote",
+                type: "Full-time",
+                salary: "₹14,00,000 - ₹20,00,000/yr",
+                skills: ["Elixir", "Phoenix", "Functional Programming", "Distributed Systems", "Erlang", "WebSockets"],
+                description: "Build scalable backend systems using Elixir and Phoenix framework. Implement real-time features and distributed architectures.",
+                experience: "Senior"
+            },
+            {
+                id: 48,
+                title: "Scrum Master",
+                company: "AgileWorks",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹12,00,000 - ₹16,00,000/yr",
+                skills: ["Scrum", "Agile", "JIRA", "Facilitation", "Coaching", "Team Leadership"],
+                description: "Facilitate Agile ceremonies and remove impediments for development teams. Coach teams on Agile principles and continuous improvement.",
+                experience: "Mid"
+            },
+            {
+                id: 49,
+                title: "Technical Recruiter",
+                company: "TalentHunt",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹6,00,000 - ₹9,00,000/yr",
+                skills: ["Recruiting", "Technical Screening", "Sourcing", "Interviewing", "ATS", "Employer Branding"],
+                description: "Source and recruit top technical talent for various IT positions. Build relationships with candidates and hiring managers.",
+                experience: "Mid"
+            },
+            {
+                id: 50,
+                title: "Chief Technology Officer",
+                company: "StartUp Ventures",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹35,00,000 - ₹50,00,000/yr",
+                skills: ["Leadership", "Technology Strategy", "Architecture", "Team Building", "Innovation", "Product Development"],
+                description: "Lead the technology vision and strategy for our startup. Build and mentor high-performing engineering teams to deliver innovative products.",
+                experience: "Senior"
+            }
+        ];
+    </script>
+</body>
+</html>
